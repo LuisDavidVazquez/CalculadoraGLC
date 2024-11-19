@@ -6,20 +6,10 @@ export default function App() {
   const [expression, setExpression] = useState('');
   const [tree, setTree] = useState(null);
 
-  const generateTree = () => {
-    try {
-      const treeStructure = parseExpression(expression);
-      setTree(treeStructure);
-    } catch (error) {
-      setDisplay('Error in Tree');
-      setTree(null);
-    }
-  };
-
   const handleNumber = (number) => {
     const newExpression = expression + number;
     setExpression(newExpression);
-    setDisplay(newExpression); // Actualiza el display para mostrar la expresión completa
+    setDisplay(newExpression); // Muestra la expresión completa en tiempo real
   };
 
   const handleOperator = (op) => {
@@ -43,47 +33,48 @@ export default function App() {
     setDisplay(newExpression);
   };
 
-  const calculate = () => {
-    try {
-      const result = eval(expression); // Evalúa la expresión
-      setDisplay(`${expression} = ${result}`); // Muestra la operación completa y el resultado
-    } catch (error) {
-      setDisplay('Error');
-      setExpression('');
-    }
-  };
-
   const clear = () => {
     setDisplay('0');
     setExpression('');
     setTree(null);
   };
 
-  const parseExpression = (expr) => {
-    // Aquí se implementa un parser básico para convertir la expresión en un árbol binario
-    const operators = ['+', '-', '*', '/'];
-    let lastOperatorIndex = -1;
+  const validateExpression = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ expression }),
+      });
+      const data = await response.json();
 
-    operators.forEach((op) => {
-      const index = expr.lastIndexOf(op);
-      if (index > lastOperatorIndex) {
-        lastOperatorIndex = index;
+      if (response.ok) {
+        setDisplay(`${expression} = ${data.result}`);
+      } else {
+        setDisplay("Error");
       }
-    });
-
-    if (lastOperatorIndex === -1) {
-      // No hay operadores, el nodo es un número o paréntesis
-      return { value: expr, children: [] };
+    } catch (error) {
+      setDisplay("Error");
     }
+  };
 
-    const left = expr.slice(0, lastOperatorIndex);
-    const right = expr.slice(lastOperatorIndex + 1);
-    const operator = expr[lastOperatorIndex];
+  const fetchTree = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/generate-tree", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ expression }),
+      });
+      const data = await response.json();
 
-    return {
-      value: operator,
-      children: [parseExpression(left), parseExpression(right)],
-    };
+      if (response.ok) {
+        setTree(data.tree);
+      } else {
+        setDisplay("Error");
+      }
+    } catch (error) {
+      setDisplay("Error");
+    }
   };
 
   const renderTree = (node) => {
@@ -129,8 +120,8 @@ export default function App() {
 
             <button onClick={() => handleNumber(0)}>0</button>
             <button onClick={() => handleNumber('.')}>.</button>
-            <button onClick={calculate}>=</button>
-            <button onClick={generateTree}>Tree</button>
+            <button onClick={validateExpression}>=</button>
+            <button onClick={fetchTree}>Tree</button>
           </div>
         </div>
       </main>
