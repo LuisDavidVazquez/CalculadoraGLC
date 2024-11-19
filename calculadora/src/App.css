@@ -1,0 +1,132 @@
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+} 
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+main {
+  width: 50%;
+  height: 100%;
+  background-color: #002079;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} 
+
+section {
+  width: 50%;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+.calculator {
+  background-color: #333;
+  border-radius: 10px;
+  padding: 20px;
+  width: auto;
+}
+
+.display {
+  background-color: #444;
+  color: white;
+  font-size: 2rem;
+  padding: 10px;
+  text-align: right;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  min-height: 60px;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+button {
+  background-color: #555;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 15px;
+  transition: background-color 0.2s;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+button:nth-child(3) {
+  background-color: #ff4444;
+}
+
+button:nth-child(1),
+button:nth-child(2),
+button:nth-child(4),
+button:nth-child(8),
+button:nth-child(12),
+button:nth-child(16) {
+  background-color: #777;
+}
+
+button:nth-child(19) {
+  background-color: #ffaa00;
+}
+
+.tree-container {
+  width: 50%;
+  height: 100%;
+  background-color: #ffffff;
+  padding: 20px;
+  overflow: auto;
+}
+
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.node-content {
+  background-color: #002079;
+  color: white;
+  padding: 10px;
+  border-radius: 50%;
+  margin: 5px;
+  min-width: 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.node-children {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
+}
+
+.node-children::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 2px;
+  height: 10px;
+  background-color: #002079;
+}
