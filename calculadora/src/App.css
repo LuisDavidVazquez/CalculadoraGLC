@@ -132,6 +132,8 @@ img {
   border-radius: 10px;
   width: 80%;
   max-width: 600px;
+  overflow: scroll;
+  max-height: 80%;
 }
 
 .modal-content table {

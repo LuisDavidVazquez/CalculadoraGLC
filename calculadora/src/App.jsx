@@ -7,7 +7,8 @@ export default function App() {
   const [tree, setTree] = useState(null);
   const [memory, setMemory] = useState(null); // Guarda el resultado de la última operación
   const [showModal, setShowModal] = useState(false);
-  const [tokens, setTokens] = useState([]); 
+  const [tokens, setTokens] = useState([]);
+  const [tokenCount, setTokenCount] = useState(0); 
 
   const handleNumber = (number) => {
     const newExpression = expression + number;
@@ -91,8 +92,8 @@ export default function App() {
 
   const recallMemory = () => {
     if (memory !== null) {
-      setDisplay(memory.toString());
-      setExpression(memory.toString());
+      setDisplay(expression + memory.toString());
+      setExpression(expression + memory.toString());
     }
   };
 
@@ -103,9 +104,13 @@ export default function App() {
       "-": "Operador resta",
       "*": "Operador multiplicación",
       "/": "Operador división",
+      ".": "Punto decimal"
     };
 
+    let counter = 0;
+
     for (const char of expression) {
+      counter ++;
       if (!isNaN(char)) {
         tokenList.push({ token: char, type: "Número entero" });
       } else if (operators[char]) {
@@ -118,6 +123,9 @@ export default function App() {
     }
 
     setTokens(tokenList);
+    console.log(counter);
+    
+    setTokenCount(counter)
     setShowModal(true);
   };
 
@@ -186,6 +194,10 @@ export default function App() {
                   </tr>
                 ))}
               </tbody>
+              <tr>
+                  <th>Total</th>
+                  <th style={{backgroundColor: "transparent", color: "black"}}>{tokenCount}</th>
+                </tr>
             </table>
             <button onClick={() => setShowModal(false)}>Cerrar</button>
           </div>
